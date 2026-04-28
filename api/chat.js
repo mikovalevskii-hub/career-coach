@@ -19,12 +19,16 @@ Ask ONE question at a time about:
 - Hobbies that could become paid work
 - Lifestyle constraints affecting work
 
-RULES:
+CRITICAL RULES:
 - ONE question at a time, never stack questions
-- Acknowledge each answer in 1 sentence then move on
-- After 15-25 exchanges when you have a complete picture, say exactly: "I now have everything I need. Generating your report now..." then write the full report.
+- Acknowledge each answer in 1 short sentence then ask the next question
+- Group related topics in single questions to be efficient (e.g. "Tell me about your work history — every job you've had including part-time and casual")
+- You have a STRICT BUDGET of 18 user exchanges total
+- By exchange 12 at the latest, you MUST start wrapping up
+- By exchange 15 at the absolute latest, you MUST say exactly: "I now have everything I need. Generating your report now..." and IMMEDIATELY produce the full report below in the same message
+- Do not exceed 18 exchanges under any circumstances — if you're approaching the limit and still missing info, make reasonable inferences and produce the report anyway
 
-REPORT FORMAT:
+REPORT FORMAT (must follow exactly):
 ---REPORT---
 # YOUR CAREER STRATEGY REPORT
 ## SITUATION SNAPSHOT
@@ -83,7 +87,7 @@ module.exports = function(req, res) {
 
     const payload = JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 2000,
+      max_tokens: 3000,
       stream: false,
       system: SYSTEM_PROMPT,
       messages: messages
@@ -107,11 +111,9 @@ module.exports = function(req, res) {
       apiRes.setEncoding('utf8');
       apiRes.on('data', chunk => { data += chunk; });
       apiRes.on('end', () => {
-        // Log status for debugging in Vercel logs
         console.log('Anthropic status:', apiRes.statusCode);
         console.log('Anthropic response (first 500 chars):', data.substring(0, 500));
 
-        // If response is streaming format (starts with "event:" or "data:"), surface a clear error
         if (data.trim().startsWith('event:') || data.trim().startsWith('data:')) {
           res.status(500).json({
             error: 'Got streaming response unexpectedly',
@@ -122,7 +124,6 @@ module.exports = function(req, res) {
 
         try {
           const parsed = JSON.parse(data);
-          // Pass through Anthropic's status code so frontend sees errors properly
           res.status(apiRes.statusCode).json(parsed);
         } catch(e) {
           res.status(500).json({
