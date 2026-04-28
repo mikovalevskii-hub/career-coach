@@ -1,3 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Advantage AI Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
+.screen { display: none; }
+#landing.active { display: flex; flex-direction: column; min-height: 100vh; }
+#chat-screen.active { display: flex; flex-direction: column; height: 100vh; }
+#report-screen.active { display: block; min-height: 100vh; }
+#capped-screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 40px; }
+.bar { height: 3px; background: #ff7b28; flex-shrink: 0; }
+.lh { padding: 24px 40px; border-bottom: 1px solid rgba(255,255,255,.06); display: flex; align-items: center; justify-content: space-between; }
+.logo-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
+.logo-text span { color: #ff7b28; }
+.badge { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: #ff7b28; border: 1px solid rgba(255,123,40,.3); padding: 5px 14px; border-radius: 2px; }
+.hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
+.eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #ff7b28; margin-bottom: 20px; }
+.hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(48px, 9vw, 84px); font-weight: 800; line-height: .92; text-transform: uppercase; margin-bottom: 24px; }
+.hero h1 em { color: #ff7b28; font-style: normal; }
+.hero > p { font-size: 17px; line-height: 1.65; color: rgba(255,255,255,.6); max-width: 500px; margin-bottom: 40px; }
+.g3 { display: flex; gap: 1px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; margin-bottom: 40px; width: 100%; max-width: 520px; }
+.gi { background: #030303; flex: 1; padding: 22px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.gi-icon { font-size: 24px; line-height: 1; }
+.gi-text { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: rgba(255,255,255,.7); }
+.sbtn { background: #ff7b28; color: #030303; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; border: none; padding: 18px 56px; border-radius: 2px; cursor: pointer; transition: .15s; }
+.sbtn:hover { background: #ff8f45; transform: translateY(-1px); }
+.snote { margin-top: 14px; font-size: 13px; color: rgba(255,255,255,.28); }
+.ch { padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; background: #030303; }
+.ch-left { display: flex; align-items: center; gap: 14px; }
+.phase { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.26); padding-left: 14px; border-left: 1px solid rgba(255,255,255,.1); }
+.phase span { color: #ff7b28; }
+.ctr { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; color: rgba(255,255,255,.3); }
+.ctr.warn { color: #ff7b28; }
+.pbar { height: 2px; background: rgba(255,255,255,.05); flex-shrink: 0; }
+.pfill { height: 100%; background: #ff7b28; transition: width .5s; width: 0; }
+.msgs { flex: 1; overflow-y: auto; padding: 20px 0; }
+.msgs::-webkit-scrollbar { width: 3px; }
+.msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); }
+.mr { display: flex; padding: 5px 24px; gap: 10px; animation: mi .2s ease forwards; opacity: 0; }
+.mr.fx { animation: none; opacity: 1; }
+.mr.user { flex-direction: row-reverse; }
+@keyframes mi { to { opacity: 1; } }
+.av { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 800; margin-top: 2px; }
+.av.c { background: #ff7b28; color: #030303; }
+.av.u { background: rgba(255,255,255,.08); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.1); }
+.bub { max-width: 75%; padding: 12px 16px; font-size: 14px; line-height: 1.62; }
+.mr.c .bub { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); color: rgba(255,255,255,.88); border-radius: 2px 10px 10px 10px; }
+.mr.user .bub { background: rgba(255,123,40,.1); border: 1px solid rgba(255,123,40,.28); color: #fff; border-radius: 10px 2px 10px 10px; }
+.tdots { display: flex; align-items: center; gap: 4px; padding: 8px 12px; }
+.td { width: 5px; height: 5px; background: #ff7b28; border-radius: 50%; animation: tb 1.1s ease-in-out infinite; opacity: .4; }
+.td:nth-child(2){animation-delay:.18s} .td:nth-child(3){animation-delay:.36s}
+@keyframes tb { 0%,60%,100%{transform:translateY(0);opacity:.35} 30%{transform:translateY(-4px);opacity:1} }
+.ia { padding: 12px 24px 20px; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; background: #030303; }
+.ir { display: flex; gap: 8px; align-items: flex-end; }
+.mi { flex: 1; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 4px; padding: 13px 16px; color: #fff; font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.4; resize: none; min-height: 48px; max-height: 120px; outline: none; transition: border-color .2s; }
+.mi:focus { border-color: rgba(255,123,40,.35); }
+.mi::placeholder { color: rgba(255,255,255,.16); }
+.sb { background: #ff7b28; border: none; border-radius: 4px; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: .15s; }
+.sb:hover { background: #ff8f45; }
+.sb:disabled { background: rgba(255,123,40,.2); cursor: not-allowed; }
+.sb svg { width: 17px; height: 17px; fill: #030303; }
+.hint { font-size: 11px; color: rgba(255,255,255,.16); margin-top: 6px; text-align: center; }
+.err { display: none; background: rgba(200,50,50,.12); border: 1px solid rgba(200,50,50,.28); border-radius: 3px; padding: 8px 14px; margin: 4px 24px; font-size: 13px; color: #ff8080; }
+.rh { padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #030303; z-index: 10; }
+.rtitle { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #ff7b28; }
+.pbtn { background: transparent; border: 1px solid rgba(255,255,255,.13); color: rgba(255,255,255,.5); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 9px 18px; border-radius: 2px; cursor: pointer; transition: .2s; }
+.pbtn:hover { border-color: #ff7b28; color: #ff7b28; }
+.rb { max-width: 760px; margin: 0 auto; padding: 44px 40px 80px; }
+.rtop { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.rtop h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px,5vw,58px); font-weight: 800; text-transform: uppercase; line-height: .93; margin-bottom: 10px; }
+.rtop h1 em { color: #ff7b28; font-style: normal; }
+.rsub { font-size: 13px; color: rgba(255,255,255,.32); }
+#report-content { font-size: 15px; line-height: 1.78; color: rgba(255,255,255,.78); }
+#report-content h2 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(14px,2vw,18px); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #ff7b28; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,123,40,.18); }
+#report-content strong { color: #fff; font-weight: 600; }
+#report-content p { margin-bottom: 12px; }
+#capped-screen h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; }
+#capped-screen p { color: rgba(255,255,255,.45); max-width: 360px; line-height: 1.65; font-size: 15px; margin-bottom: 4px; }
+.rt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: #ff7b28; margin-top: 16px; }
+@media print { .ch,.ia,.pbtn,.rh,.bar{display:none!important;} body{background:#fff;color:#111;overflow:auto;} .rtop h1 em{color:#ff7b28!important;} #report-content{color:#222!important;} .rb{padding:0;} }
+@media (max-width:600px) { .lh{padding:16px 18px;} .hero{padding:36px 18px;} .g3{flex-direction:column;} .ch{padding:10px 14px;} .msgs{padding:10px 0;} .mr{padding:4px 12px;} .bub{max-width:88%;font-size:13px;} .ia{padding:10px 14px 16px;} .rb{padding:28px 18px 60px;} .rh{padding:14px 18px;} }
+</style>
+</head>
+<body>
+
+<div id="landing" class="screen active">
+  <div class="bar"></div>
+  <header class="lh">
+    <div class="logo-text">Career <span>Advantage</span></div>
+    <div class="badge">AI Career Coach</div>
+  </header>
+  <div class="hero">
+    <div class="eyebrow">Included with your purchase</div>
+    <h1>Find Your<br><em>Highest</em><br>Paying Path</h1>
+    <p>A personalised career strategy session built for the Australian job market. Tell us about yourself — we'll tell you exactly where to aim and how to get there.</p>
+    <div class="g3">
+      <div class="gi"><div class="gi-icon">🎯</div><div class="gi-text">Role clarity</div></div>
+      <div class="gi"><div class="gi-icon">💰</div><div class="gi-text">Income roadmap</div></div>
+      <div class="gi"><div class="gi-icon">📋</div><div class="gi-text">3-year plan</div></div>
+    </div>
+    <button class="sbtn" id="start-btn">Start My Session →</button>
+    <p class="snote">15 messages per day · Resets midnight AEST · Save your report at the end</p>
+  </div>
+</div>
+
+<div id="chat-screen" class="screen">
+  <div class="bar"></div>
+  <header class="ch">
+    <div class="ch-left">
+      <div class="logo-text" style="font-size:14px;">Career <span>Advantage</span></div>
+      <div class="phase" id="phase">Phase <span>1</span> — Discovery</div>
+    </div>
+    <div class="ctr" id="ctr">15 remaining</div>
+  </header>
+  <div class="pbar"><div class="pfill" id="pfill"></div></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="err" id="err"></div>
+  <div class="ia">
+    <div class="ir">
+      <textarea class="mi" id="mi" placeholder="Type your answer here..." rows="1"></textarea>
+      <button class="sb" id="sb">
+        <svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div class="hint">Enter to send · Shift+Enter for new line</div>
+  </div>
+</div>
+
+<div id="report-screen" class="screen">
+  <div class="bar"></div>
+  <header class="rh">
+    <div class="logo-text" style="font-size:14px;">Career <span>Advantage</span></div>
+    <div class="rtitle">Your Career Strategy Report</div>
+    <button class="pbtn" onclick="window.print()">Save / Print ↗</button>
+  </header>
+  <div class="rb">
+    <div class="rtop">
+      <h1>Your Career<br><em>Strategy Report</em></h1>
+      <div class="rsub" id="rdate"></div>
+    </div>
+    <div id="report-content"></div>
+  </div>
+</div>
+
+<div id="capped-screen" class="screen">
+  <div class="logo-text" style="margin-bottom:24px;">Career <span>Advantage</span></div>
+  <h2>Daily limit reached</h2>
+  <p>You've used all 15 messages for today.</p>
+  <p>Come back tomorrow to continue your session.</p>
+  <div class="rt" id="rtick"></div>
+</div>
+
 <script>
 var PROXY = '/api/chat';
 var CAP = 15;
@@ -235,3 +393,5 @@ if (document.readyState === 'loading') {
   init();
 }
 </script>
+</body>
+</html>
