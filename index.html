@@ -105,7 +105,7 @@ body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
       <div class="gi"><div class="gi-icon">📋</div><div class="gi-text">3-year plan</div></div>
     </div>
     <button class="sbtn" id="start-btn">Start My Session →</button>
-    <p class="snote">15 messages per day · Resets midnight AEST · Save your report at the end</p>
+    <p class="snote">30 messages per day · Resets midnight AEST · Save your report at the end</p>
   </div>
 </div>
 
@@ -116,7 +116,7 @@ body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
       <div class="logo-text" style="font-size:14px;">Career <span>Advantage</span></div>
       <div class="phase" id="phase">Phase <span>1</span> — Discovery</div>
     </div>
-    <div class="ctr" id="ctr">15 remaining</div>
+    <div class="ctr" id="ctr">30 remaining</div>
   </header>
   <div class="pbar"><div class="pfill" id="pfill"></div></div>
   <div class="msgs" id="msgs"></div>
@@ -151,14 +151,14 @@ body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
 <div id="capped-screen" class="screen">
   <div class="logo-text" style="margin-bottom:24px;">Career <span>Advantage</span></div>
   <h2>Daily limit reached</h2>
-  <p>You've used all 15 messages for today.</p>
+  <p>You've used all 30 messages for today.</p>
   <p>Come back tomorrow to continue your session.</p>
   <div class="rt" id="rtick"></div>
 </div>
 
 <script>
 var PROXY = '/api/chat';
-var CAP = 15;
+var CAP = 30;
 
 function today() { return new Date().toDateString(); }
 
@@ -361,10 +361,10 @@ function updateUI() {
   var r = rem();
   var el = document.getElementById('ctr');
   el.textContent = r + ' message' + (r !== 1 ? 's' : '') + ' remaining today';
-  el.className = 'ctr' + (r <= 4 ? ' warn' : '');
-  document.getElementById('pfill').style.width = Math.min(100, (qc / 20) * 100) + '%';
-  var ph = qc < 8 ? 'Discovery' : qc < 16 ? 'Deep Dive' : 'Strategy';
-  var n = qc < 8 ? 1 : qc < 16 ? 2 : 3;
+  el.className = 'ctr' + (r <= 5 ? ' warn' : '');
+  document.getElementById('pfill').style.width = Math.min(100, (qc / 18) * 100) + '%';
+  var ph = qc < 6 ? 'Discovery' : qc < 12 ? 'Deep Dive' : 'Strategy';
+  var n = qc < 6 ? 1 : qc < 12 ? 2 : 3;
   document.getElementById('phase').innerHTML = 'Phase <span>' + n + '</span> — ' + ph;
 }
 
