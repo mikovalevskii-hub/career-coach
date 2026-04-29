@@ -83,20 +83,23 @@ body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
 .pbtn.primary { background: #ff7b28; color: #030303; border-color: #ff7b28; }
 .pbtn.primary:hover { background: #ff8f45; border-color: #ff8f45; color: #030303; }
 .rb { max-width: 760px; margin: 0 auto; padding: 44px 40px 80px; }
-.rtop { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.rtop { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,.07); }
 .rtop h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(36px,5vw,58px); font-weight: 800; text-transform: uppercase; line-height: .93; margin-bottom: 10px; }
 .rtop h1 em { color: #ff7b28; font-style: normal; }
-.save-banner { background: rgba(255,123,40,.08); border: 1px solid rgba(255,123,40,.3); border-radius: 4px; padding: 14px 18px; margin-bottom: 28px; font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.55; }
+.save-banner { background: rgba(255,123,40,.08); border: 1px solid rgba(255,123,40,.35); border-radius: 4px; padding: 16px 20px; margin-bottom: 16px; font-size: 14px; color: rgba(255,255,255,.88); line-height: 1.6; }
 .save-banner strong { color: #ff7b28; }
+.ai-banner { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 4px; padding: 16px 20px; margin-bottom: 32px; font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.6; }
+.ai-banner strong { color: #fff; }
 #report-content { font-size: 15px; line-height: 1.78; color: rgba(255,255,255,.78); }
 #report-content h2 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(14px,2vw,18px); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #ff7b28; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,123,40,.18); }
+#report-content h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #fff; margin: 20px 0 8px; }
 #report-content strong { color: #fff; font-weight: 600; }
 #report-content p { margin-bottom: 12px; }
 #report-content blockquote { border-left: 3px solid #ff7b28; padding: 10px 16px; margin: 14px 0; background: rgba(255,123,40,.05); color: rgba(255,255,255,.9); }
 #capped-screen h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; }
 #capped-screen p { color: rgba(255,255,255,.45); max-width: 360px; line-height: 1.65; font-size: 15px; margin-bottom: 4px; }
 .rt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: #ff7b28; margin-top: 16px; }
-@media print { .ch,.ia,.pbtn,.rh,.bar,.gen-overlay{display:none!important;} body{background:#fff;color:#111;overflow:auto;} .rtop h1 em{color:#ff7b28!important;} #report-content{color:#222!important;} .save-banner{background:#fff5ee!important;color:#222!important;border-color:#ff7b28!important;} .rb{padding:0;} }
+@media print { .ch,.ia,.pbtn,.rh,.bar,.gen-overlay,.ai-banner{display:none!important;} body{background:#fff;color:#111;overflow:auto;} .rtop h1 em{color:#ff7b28!important;} #report-content{color:#222!important;} .save-banner{background:#fff5ee!important;color:#222!important;border-color:#ff7b28!important;} .rb{padding:0;} }
 @media (max-width:600px) { .lh{padding:16px 18px;} .hero{padding:36px 18px;} .g3{flex-direction:column;} .ch{padding:10px 14px;} .msgs{padding:10px 0;} .mr{padding:4px 12px;} .bub{max-width:88%;font-size:13px;} .ia{padding:10px 14px 16px;} .rb{padding:28px 18px 60px;} .rh{padding:14px 18px;} .gen-title{font-size:22px;} .gen-sub{font-size:14px;} }
 </style>
 </head>
@@ -167,7 +170,10 @@ body { background: #030303; color: #fff; font-family: 'Barlow', sans-serif; }
       <h1>Your Career<br><em>Strategy Report</em></h1>
     </div>
     <div class="save-banner">
-      <strong>Save this report now.</strong> Use the Save / Print button above, or copy the text into a document. This report will not be emailed to you and will be lost if you close this tab without saving.
+      <strong>Save this report now.</strong> Press the <strong>Save / Print</strong> button at the top right to save it as a PDF to your phone (Files / Books) or computer. Once you close this tab the report cannot be recovered — it is not emailed to you.
+    </div>
+    <div class="ai-banner">
+      <strong>Pro tip — turn this into interview-winning applications.</strong> Paste this entire report into Claude, ChatGPT or Gemini and ask it to write a tailored resume and cover letter for any specific job ad. Because the report contains your full positioning, target roles, narrative and keywords, the output will be far sharper than anything you'd get starting from scratch.
     </div>
     <div id="report-content"></div>
   </div>
@@ -408,6 +414,7 @@ function fmtReport(raw) {
   var clean = raw.replace('---REPORT---', '').replace('---END---', '').trim();
   clean = clean.replace(/^# (.+)$/gm, '<h1 style="font-family:\'Barlow Condensed\',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;text-transform:uppercase;margin-bottom:20px;">$1</h1>');
   clean = clean.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  clean = clean.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   clean = clean.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
   clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   clean = clean.replace(/^- (.+)$/gm, '<p style="padding-left:14px;border-left:2px solid rgba(255,123,40,.4);margin:4px 0;">$1</p>');
